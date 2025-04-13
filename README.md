@@ -1,81 +1,36 @@
-﻿# Chibi-chat
- ![image](https://github.com/user-attachments/assets/96912805-146b-4bf3-9ef2-fb8a549ccf8b)
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-A lightweight and fast real-time chat application built with Socket.io, TypeScript, Vite, and Tailwind CSS. This application allows anyone to create and join chat rooms to communicate anonymously or with a chosen name.
+## Getting Started
 
-## Features
-- 🌐 Real-Time Chat: Seamless and instant messaging powered by Socket.io.
-- 🏠 Room Creation: Create unique chat rooms or join existing ones.
-- 👤 Anonymous or Named Chat: Chat anonymously or set a display name.
-- ⚡ Fast and Responsive: Built with Vite for a smooth development experience and optimized performance.
-- 🎨 Customizable UI: Styled with Tailwind CSS for modern and responsive design.
-## Technologies Used
-Socket.io: For real-time, bidirectional communication.
-TypeScript: For type safety and better development experience.
-Vite: For fast builds and hot module replacement during development.
-Tailwind CSS: For responsive and customizable UI design.
-Getting Started
-Follow these steps to run the application locally.
+First, run the development server:
 
-## Prerequisites
-Node.js (v14+)
-npm or yarn
-Installation
-Clone the repository:
-
-```
-Copy code
-git clone https://github.com/0x4nud33p/chat-app.git
-cd chat-app
-```
-Install dependencies:
-
-```
-Copy code
-npm install
-# or
-yarn
-```
-Start the development server:
-
-```
-
+```bash
 npm run dev
 # or
 yarn dev
-```
-Open your browser and navigate to:
-http://localhost:5173
-Build for Production
-To create an optimized production build:
-
-```
-npm run build
 # or
-yarn build
+pnpm dev
+# or
+bun dev
 ```
 
-Usage
-Open the app in your browser.
-Create a new chat room or join an existing one by entering the room name.
-Start chatting anonymously or enter a name to personalize your messages.
-Screenshots
-(Add relevant screenshots here showing the UI and functionality)
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-Contributing
-Contributions are welcome! If you find a bug or have a feature request, feel free to open an issue or submit a pull request.
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-- Fork the repository.
-- Create a new branch for your feature:
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-```
-git checkout -b feature-name
-```
-Commit your changes and push them:
+## Learn More
 
-```
-git add .
-git commit -m "Add feature"
-git push origin feature-name
-```
-Open a pull request.
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

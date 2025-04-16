@@ -1,34 +1,30 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Plus, Search, LogOut } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { Plus, Hash } from 'lucide-react';
+import { signOut, useSession } from 'next-auth/react';
 import { SafeChatRoom } from '@/types';
-import { useSocket } from '@/hooks/useSocket';
+import Avatar from '@/components/ui/Avatar';
+import ThemeToggle from '@/components/ui/ThemeToggle';
 
 export default function ChatList() {
   const [chatRooms, setChatRooms] = useState<SafeChatRoom[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showNewChatModal, setShowNewChatModal] = useState(false);
   const router = useRouter();
-  const { socket } = useSocket();
+  const { data: session } = useSession();
 
   useEffect(() => {
     const fetchChatRooms = async () => {
       try {
         const response = await fetch('/api/chat-rooms');
-        
-        if (!response.ok) {
-          throw new Error('Failed to fetch chat rooms');
-        }
-        
         const data = await response.json();
         setChatRooms(data);
       } catch (error) {
-        setError('Failed to load chat rooms');
-        console.error(error);
+        console.error('Error fetching chat rooms:', error);
       } finally {
         setIsLoading(false);
       }
@@ -37,111 +33,149 @@ export default function ChatList() {
     fetchChatRooms();
   }, []);
 
-  useEffect(() => {
-    if (!socket) return;
+  const filteredChatRooms = chatRooms.filter(room =>
+    room.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
-    // Listen for new chat room creation
-    socket.on('chat-room-created', (newChatRoom: SafeChatRoom) => {
+  const handleCreateChatRoom = async (name: string, description: string) => {
+    try {
+      const response = await fetch('/api/chat-rooms', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, description }),
+      });
+      
+      const newChatRoom = await response.json();
       setChatRooms(prev => [...prev, newChatRoom]);
-    });
-
-    // Listen for chat room updates
-    socket.on('chat-room-updated', (updatedChatRoom: SafeChatRoom) => {
-      setChatRooms(prev => 
-        prev.map(room => room.id === updatedChatRoom.id ? updatedChatRoom : room)
-      );
-    });
-
-    // Listen for chat room deletion
-    socket.on('chat-room-deleted', (chatRoomId: string) => {
-      setChatRooms(prev => prev.filter(room => room.id !== chatRoomId));
-    });
-
-    return () => {
-      socket.off('chat-room-created');
-      socket.off('chat-room-updated');
-      socket.off('chat-room-deleted');
-    };
-  }, [socket]);
-
-  const handleRoomSelect = (roomId: string) => {
-    setSelectedRoom(roomId);
-    router.push(`/chat/${roomId}`);
+      setShowNewChatModal(false);
+      
+      // Navigate to the new chat room
+      router.push(`/chat/${newChatRoom.id}`);
+    } catch (error) {
+      console.error('Error creating chat room:', error);
+    }
   };
-
-  const handleCreateRoom = () => {
-    router.push('/chat/new');
-  };
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-full">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="p-4 text-red-500 text-center">
-        {error}
-      </div>
-    );
-  }
 
   return (
-    <div className="h-full flex flex-col">
-      <div className="p-4 border-b dark:border-gray-700">
-        <h2 className="font-bold text-lg text-gray-900 dark:text-white">Chats</h2>
+    <div className="h-screen flex flex-col bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800">
+      <div className="p-4 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between">
+        <h1 className="text-xl font-bold text-gray-900 dark:text-white">Chats</h1>
+        <div className="flex items-center space-x-2">
+          <ThemeToggle />
+          <motion.button
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setShowNewChatModal(true)}
+            className="p-2 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400"
+            aria-label="New chat"
+          >
+            <Plus className="h-5 w-5" />
+          </motion.button>
+          <motion.button
+            whileTap={{ scale: 0.95 }}
+            onClick={() => signOut({ callbackUrl: '/auth/signin' })}
+            className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400"
+            aria-label="Sign out"
+          >
+            <LogOut className="h-5 w-5" />
+          </motion.button>
+        </div>
       </div>
       
-      <div className="flex-1 overflow-y-auto p-2">
-        {chatRooms.length === 0 ? (
-          <p className="text-center text-gray-500 dark:text-gray-400 p-4">
-            No chat rooms found
-          </p>
-        ) : (
-          chatRooms.map((room) => (
-            <motion.div
-              key={room.id}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className={`p-3 mb-2 rounded-md cursor-pointer ${
-                selectedRoom === room.id
-                  ? 'bg-blue-100 dark:bg-blue-900/30'
-                  : 'hover:bg-gray-100 dark:hover:bg-gray-800'
-              }`}
-              onClick={() => handleRoomSelect(room.id)}
-            >
-              <div className="flex items-center">
-                <div className="flex-shrink-0 mr-3">
-                  <div className="w-10 h-10 rounded-md bg-blue-500 dark:bg-blue-600 flex items-center justify-center text-white">
-                    <Hash className="h-5 w-5" />
+      <div className="p-4">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+          <input
+            type="text"
+            placeholder="Search chats..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-10 pr-4 py-2 rounded-md bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white border-none"
+          />
+        </div>
+      </div>
+      
+      <div className="flex-1 overflow-y-auto">
+        {isLoading ? (
+          <div className="flex items-center justify-center h-full">
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
+          </div>
+        ) : filteredChatRooms.length > 0 ? (
+          <ul className="divide-y divide-gray-200 dark:divide-gray-800">
+            {filteredChatRooms.map((room) => (
+              <motion.li
+                key={room.id}
+                whileHover={{ backgroundColor: 'rgba(0, 0, 0, 0.05)' }}
+                onClick={() => router.push(`/chat/${room.id}`)}
+                className="p-4 cursor-pointer"
+              >
+                <div className="flex items-center space-x-3">
+                  <div className="flex-shrink-0">
+                    <div className="h-10 w-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
+                      <span className="text-blue-600 dark:text-blue-400 font-semibold">
+                        {room.name.substring(0, 2).toUpperCase()}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                      {room.name}
+                    </p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                      {room.description || `${room._count.members} members`}
+                    </p>
+                  </div>
+                  <div className="flex-shrink-0">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-300">
+                      {room._count.messages}
+                    </span>
                   </div>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-sm font-medium truncate text-gray-900 dark:text-white">
-                    {room.name}
-                  </h3>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
-                    {room._count.messages} messages • {room._count.members} members
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-          ))
+              </motion.li>
+            ))}
+          </ul>
+        ) : (
+          <div className="h-full flex flex-col items-center justify-center text-gray-500 dark:text-gray-400 p-4 text-center">
+            <p>No chat rooms found</p>
+            <button
+              onClick={() => setShowNewChatModal(true)}
+              className="mt-2 text-blue-600 dark:text-blue-400 hover:underline"
+            >
+              Create a new chat
+            </button>
+          </div>
         )}
       </div>
       
-      <div className="p-3 border-t dark:border-gray-700">
-        <button
-          onClick={handleCreateRoom}
-          className="w-full flex items-center justify-center space-x-2 p-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white transition duration-200"
-        >
-          <Plus className="h-5 w-5" />
-          <span>New Chat Room</span>
-        </button>
-      </div>
+      {/* Current user info */}
+      {session?.user && (
+        <div className="p-4 border-t border-gray-200 dark:border-gray-800">
+          <div className="flex items-center space-x-3">
+            <Avatar
+              src={session.user.image}
+              name={session.user.name}
+              isOnline={true}
+            />
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                {session.user.name}
+              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                {session.user.email}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* New Chat Modal */}
+      {showNewChatModal && (
+        <NewChatModal
+          onClose={() => setShowNewChatModal(false)}
+          onCreate={handleCreateChatRoom}
+        />
+      )}
     </div>
   );
 }

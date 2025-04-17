@@ -37,7 +37,6 @@ export async function GET(
       return new NextResponse("Chat room not found", { status: 404 });
     }
     
-    // Check if user is a member or owner
     const isMember = chatRoom.members.some(member => member.id === session.user.id);
     const isOwner = chatRoom.owner.id === session.user.id;
     
@@ -80,7 +79,6 @@ export async function PATCH(
       return new NextResponse("Chat room not found", { status: 404 });
     }
     
-    // Check if user is the owner
     if (chatRoom.owner.id !== session.user.id) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
@@ -128,7 +126,6 @@ export async function DELETE(
       return new NextResponse("Chat room not found", { status: 404 });
     }
     
-    // Check if user is the owner
     if (chatRoom.owner.id !== session.user.id) {
       return new NextResponse("Unauthorized", { status: 401 });
     }

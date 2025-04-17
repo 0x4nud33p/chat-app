@@ -35,7 +35,6 @@ export async function POST(
       return new NextResponse("Chat room not found", { status: 404 });
     }
     
-    // Check if user is a member
     const isMember = chatRoom.members.some(member => member.id === session.user.id);
     
     if (!isMember) {

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { GitHub, Mail, Google } from 'lucide-react';
+import { FcGoogle } from 'react-icons/fc';
 import ThemeToggle from '@/components/ui/ThemeToggle';
 
 export default function SignIn() {
@@ -116,14 +116,14 @@ export default function SignIn() {
               onClick={() => signIn('github', { callbackUrl: '/' })}
               className="bg-gray-900 hover:bg-gray-800 text-white py-2 px-4 rounded-md transition duration-200 flex items-center justify-center"
             >
-              <GitHub className="h-5 w-5 mr-2" />
+              {/* <FcGithub className="h-5 w-5 mr-2" /> */}
               GitHub
             </button>
             <button
               onClick={() => signIn('google', { callbackUrl: '/' })}
               className="bg-white hover:bg-gray-100 text-gray-900 border border-gray-300 py-2 px-4 rounded-md transition duration-200 flex items-center justify-center"
             >
-              <Google className="h-5 w-5 mr-2 text-red-500" />
+              <FcGoogle className="h-5 w-5 mr-2 text-red-500" />
               Google
             </button>
           </div>

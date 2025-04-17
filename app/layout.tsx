@@ -1,34 +1,35 @@
-'use client';
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import './globals.css';
+import { ThemeProvider } from '@/providers/ThemeProvider';
+import SessionProvider from '@/providers/SessionProvider';
 
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
-import ChatSidebar from '@/components/ChatSidebar';
+const inter = Inter({ subsets: ['latin'] });
 
-export default function ChatLayout({ children }: { children: React.ReactNode }) {
-  const { status } = useSession();
-  const router = useRouter();
+export const metadata: Metadata = {
+  title: 'Real-Time Chat App',
+  description: 'A modern real-time chat application built with Next.js 14, Prisma, Socket.io and TailwindCSS',
+};
 
-  useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/auth/signin');
-    }
-  }, [status, router]);
-
-  if (status === 'loading') {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
-        <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
-  }
-
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <div className="flex h-screen">
-      <ChatSidebar />
-      <main className="flex-1 flex flex-col overflow-hidden">
-        {children}
-      </main>
-    </div>
+    <html lang="en" suppressHydrationWarning>
+      <body className={inter.className}>
+        <SessionProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
+        </SessionProvider>
+      </body>
+    </html>
   );
 }

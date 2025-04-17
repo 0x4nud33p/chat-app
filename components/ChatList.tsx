@@ -7,6 +7,7 @@ import { motion } from 'framer-motion';
 import { signOut, useSession } from 'next-auth/react';
 import { SafeChatRoom } from '@/types';
 import Avatar from '@/components/ui/Avatar';
+import NewChatModal from './chat/NewChatModal';
 import ThemeToggle from '@/components/ui/ThemeToggle';
 
 export default function ChatList() {

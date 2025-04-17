@@ -1,37 +1,44 @@
 'use client';
-import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
-import { useSession } from 'next-auth/react';
-import { ChevronLeft, Info, MoreVertical, Users } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { useSocket } from '@/hooks/useSocket';
-import { SafeChatRoom, SafeMessage, SafeUser } from '@/types';
-import MessageList from '@/components/chat/MessageList';
-import MessageInput from '@/components/chat/MessageInput';
-import Avatar from '@/components/ui/Avatar';
-import Link from 'next/link';
 
-export default function ChatRoomPage() {
-  const params = useParams();
-  const chatRoomId = params.chatRoomId as string;
-  const { data: session } = useSession();
+import { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import { useSocket } from '@/hooks/useSocket';
+import { SafeChatRoom, SafeMessage } from '@/types';
+import ChatMessage from '@/components/ChatMessage';
+import ChatInput from '@/components/ChatInput';
+import { Users, Settings } from 'lucide-react';
+import { motion } from 'framer-motion';
+
+export default function ChatRoomPage({ params }: { params: { chatRoomId: string } }) {
+  const { chatRoomId } = params;
   const [chatRoom, setChatRoom] = useState<SafeChatRoom | null>(null);
   const [chatMessages, setChatMessages] = useState<SafeMessage[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [showMembers, setShowMembers] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const { data: session } = useSession();
+  const messageEndRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
   
-  const { isConnected, messages, sendMessage } = useSocket({
-    chatRoomId,
-  });
+  // Initialize socket connection for this chat room
+  const { messages, sendMessage, isConnected } = useSocket({ chatRoomId });
 
+  // Fetch chat room data when component mounts
   useEffect(() => {
     const fetchChatRoom = async () => {
       try {
+        setLoading(true);
         const response = await fetch(`/api/chat-rooms/${chatRoomId}`);
         
         if (!response.ok) {
-          throw new Error('Failed to fetch chat room');
+          if (response.status === 404) {
+            setError('Chat room not found');
+          } else if (response.status === 401) {
+            setError('You are not authorized to access this chat room');
+          } else {
+            setError('Failed to fetch chat room data');
+          }
+          return;
         }
         
         const data = await response.json();
@@ -39,27 +46,32 @@ export default function ChatRoomPage() {
         setChatMessages(data.messages);
       } catch (error) {
         console.error('Error fetching chat room:', error);
-        setError('Failed to load chat room');
+        setError('An error occurred while fetching chat room data');
       } finally {
-        setIsLoading(false);
+        setLoading(false);
       }
     };
-
-    if (chatRoomId) {
-      fetchChatRoom();
-    }
+    
+    fetchChatRoom();
   }, [chatRoomId]);
 
+  // Update messages when received from socket
   useEffect(() => {
     if (messages.length > 0) {
-      setChatMessages(prev => [...prev, ...messages]);
+      setChatMessages((prev) => [...prev, ...messages]);
     }
   }, [messages]);
 
+  // Scroll to bottom when messages change
+  useEffect(() => {
+    messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [chatMessages]);
+
   const handleSendMessage = async (content: string) => {
-    if (!chatRoomId || !session?.user) return;
+    if (!session?.user) return;
     
     try {
+      // Send message to API
       const response = await fetch(`/api/chat-rooms/${chatRoomId}/messages`, {
         method: 'POST',
         headers: {
@@ -72,130 +84,93 @@ export default function ChatRoomPage() {
         throw new Error('Failed to send message');
       }
       
-      // socket io 
       const newMessage = await response.json();
+      
+      // Send message through socket
       sendMessage(content);
     } catch (error) {
       console.error('Error sending message:', error);
     }
   };
 
-  if (isLoading) {
+  if (loading) {
     return (
-      <div className="h-screen flex items-center justify-center">
-        <div className="animate-pulse text-gray-600">Loading chat...</div>
+      <div className="flex-1 flex items-center justify-center">
+        <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="h-screen flex flex-col items-center justify-center p-4">
-        <div className="text-red-500 mb-4">{error}</div>
-        <Link href="/chat" className="text-blue-500 flex items-center gap-2">
-          <ChevronLeft size={16} />
-          Back to chats
-        </Link>
+      <div className="flex-1 flex items-center justify-center">
+        <div className="text-center p-6">
+          <h3 className="text-xl font-medium mb-2">Error</h3>
+          <p className="text-gray-600 dark:text-gray-400 mb-4">{error}</p>
+          <button
+            onClick={() => router.push('/chat')}
+            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors"
+          >
+            Return to Chat Dashboard
+          </button>
+        </div>
       </div>
     );
   }
 
   if (!chatRoom) {
-    return (
-      <div className="h-screen flex flex-col items-center justify-center p-4">
-        <div className="text-gray-600 mb-4">Chat room not found</div>
-        <Link href="/chat" className="text-blue-500 flex items-center gap-2">
-          <ChevronLeft size={16} />
-          Back to chats
-        </Link>
-      </div>
-    );
+    return null;
   }
 
   return (
-    <div className="h-screen flex flex-col">
-      <div className="flex items-center justify-between p-4 border-b">
-        <div className="flex items-center gap-3">
-          <Link href="/chat" className="p-2 rounded-full hover:bg-gray-100">
-            <ChevronLeft size={20} />
-          </Link>
-          <div className="flex items-center gap-2">
-            <Avatar 
-              src={chatRoom.imageUrl} 
-              fallback={chatRoom.name?.charAt(0) || '?'} 
-              size="md"
-            />
-            <div>
-              <h1 className="font-semibold">{chatRoom.name}</h1>
-              <div className="text-xs text-gray-500 flex items-center gap-1">
-                <span className={`inline-block w-2 h-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-gray-400'}`}></span>
-                {isConnected ? 'Connected' : 'Disconnected'}
-              </div>
-            </div>
-          </div>
+    <>
+      <div className="border-b border-gray-200 dark:border-gray-800 p-4 flex items-center justify-between">
+        <div>
+          <h1 className="font-semibold text-xl">{chatRoom.name}</h1>
+          <p className="text-sm text-gray-500">
+            {chatRoom.description || 'No description provided'}
+          </p>
         </div>
-        <div className="flex items-center gap-2">
-          <button 
-            onClick={() => setShowMembers(prev => !prev)}
-            className="p-2 rounded-full hover:bg-gray-100 relative"
+        <div className="flex items-center gap-4">
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100"
           >
             <Users size={20} />
-            {chatRoom.members && chatRoom.members.length > 0 && (
-              <span className="absolute -top-1 -right-1 bg-blue-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                {chatRoom.members.length}
-              </span>
-            )}
-          </button>
-          <button className="p-2 rounded-full hover:bg-gray-100">
-            <Info size={20} />
-          </button>
-          <button className="p-2 rounded-full hover:bg-gray-100">
-            <MoreVertical size={20} />
-          </button>
+            <span className="text-sm">{chatRoom._count?.members || 0}</span>
+          </motion.button>
+          {chatRoom.ownerId === session?.user?.id && (
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => router.push(`/chat/${chatRoomId}/settings`)}
+              className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100"
+            >
+              <Settings size={20} />
+            </motion.button>
+          )}
         </div>
       </div>
 
-      <div className="flex flex-1 overflow-hidden">
-        <div className="flex-1 flex flex-col h-full">
-          <div className="flex-1 overflow-y-auto p-4">
-            <MessageList 
-              messages={chatMessages}
-              currentUser={session?.user as SafeUser}
+      <div className="flex-1 overflow-y-auto p-4">
+        {chatMessages.length === 0 ? (
+          <div className="flex items-center justify-center h-full text-gray-500">
+            <p>No messages yet. Start the conversation!</p>
+          </div>
+        ) : (
+          chatMessages.map((message) => (
+            <ChatMessage
+              key={message.id}
+              message={message}
+              isOwn={message.userId === session?.user?.id}
             />
-          </div>
-          <div className="p-4 border-t">
-            <MessageInput onSendMessage={handleSendMessage} isConnected={isConnected} />
-          </div>
-        </div>
-
-        {showMembers && (
-          <motion.div 
-            initial={{ width: 0, opacity: 0 }}
-            animate={{ width: 250, opacity: 1 }}
-            exit={{ width: 0, opacity: 0 }}
-            className="w-64 border-l bg-gray-50 overflow-y-auto"
-          >
-            <div className="p-4 border-b">
-              <h2 className="font-semibold">Members ({chatRoom.members?.length || 0})</h2>
-            </div>
-            <div className="p-2">
-              {chatRoom.members?.map((member: SafeUser) => (
-                <div key={member.id} className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-md">
-                  <Avatar 
-                    src={member.image || undefined} 
-                    fallback={member.name?.charAt(0) || '?'} 
-                    size="sm"
-                  />
-                  <div>
-                    <p className="font-medium">{member.name}</p>
-                    <p className="text-xs text-gray-500">{member.email}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </motion.div>
+          ))
         )}
+        <div ref={messageEndRef} />
       </div>
-    </div>
+
+      <ChatInput onSendMessage={handleSendMessage} />
+    </>
   );
 }

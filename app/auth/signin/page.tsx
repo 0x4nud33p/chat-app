@@ -50,6 +50,7 @@ export default function SignIn() {
       <div className="absolute top-4 right-4">
         <ThemeToggle />
       </div>
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -59,11 +60,13 @@ export default function SignIn() {
           Sign in to Chat App
         </h1>
 
+
         {error && (
           <div className="mb-4 p-3 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-md text-sm">
             {error}
           </div>
         )}
+
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -78,6 +81,7 @@ export default function SignIn() {
               required
             />
           </div>
+
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Password
@@ -90,6 +94,7 @@ export default function SignIn() {
               required
             />
           </div>
+
           <button
             type="submit"
             disabled={isLoading}
@@ -112,13 +117,6 @@ export default function SignIn() {
           </div>
 
           <div className="mt-6 grid grid-cols-2 gap-3">
-            <button
-              onClick={() => signIn('github', { callbackUrl: '/' })}
-              className="bg-gray-900 hover:bg-gray-800 text-white py-2 px-4 rounded-md transition duration-200 flex items-center justify-center"
-            >
-              {/* <FcGithub className="h-5 w-5 mr-2" /> */}
-              GitHub
-            </button>
             <button
               onClick={() => signIn('google', { callbackUrl: '/' })}
               className="bg-white hover:bg-gray-100 text-gray-900 border border-gray-300 py-2 px-4 rounded-md transition duration-200 flex items-center justify-center"

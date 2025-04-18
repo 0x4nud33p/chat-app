@@ -1,84 +1,84 @@
-#Project Folder Structure
+# Project Folder Structure
 
 chat-app/
-├── .env                         # Environment variables
+├── .env
 ├── .gitignore
 ├── package.json
-├── prisma/                      # Prisma ORM
-│   ├── schema.prisma            # Database schema
-│   └── seed.ts                  # Seed script for initial data
+├── prisma/
+│   ├── schema.prisma
+│   └── seed.ts
 ├── public/
 │   └── assets/
 │       └── images/
 │           └── default-avatar.png
-├── server.js                    # Custom server with Socket.io
-├── app/                         # App Router
-│   ├── api/                     # API Routes
+├── server.js
+├── app/
+│   ├── api/
 │   │   ├── auth/
 │   │   │   └── [...nextauth]/
-│   │   │       └── route.ts     # NextAuth API route
+│   │   │       └── route.ts
 │   │   ├── chat-rooms/
-│   │   │   ├── route.ts         # Chat rooms API routes
+│   │   │   ├── route.ts
 │   │   │   ├── [chatRoomId]/
-│   │   │   │   ├── route.ts     # Single chat room API routes
+│   │   │   │   ├── route.ts
 │   │   │   │   ├── members/
-│   │   │   │   │   └── route.ts # Chat room members API routes
+│   │   │   │   │   └── route.ts
 │   │   │   │   └── messages/
-│   │   │   │       └── route.ts # Messages API routes
+│   │   │   │       └── route.ts
 │   │   └── users/
-│   │       ├── route.ts         # Users API routes
+│   │       ├── route.ts
 │   │       └── [userId]/
-│   │           └── route.ts     # Single user API routes
+│   │           └── route.ts
 │   ├── auth/
 │   │   ├── signin/
-│   │   │   └── page.tsx         # Sign-in page
+│   │   │   └── page.tsx
 │   │   └── signup/
-│   │       └── page.tsx         # Sign-up page
+│   │       └── page.tsx
 │   ├── chat/
-│   │   ├── page.tsx             # Chat home page
+│   │   ├── page.tsx
 │   │   └── [chatRoomId]/
-│   │       └── page.tsx         # Single chat room page
+│   │       └── page.tsx
 │   ├── profile/
-│   │   └── page.tsx             # User profile page
+│   │   └── page.tsx
 │   ├── favicon.ico
-│   ├── globals.css              # Global styles
-│   ├── layout.tsx               # Root layout
-│   └── page.tsx                 # Home page
-├── components/                  # Reusable components
+│   ├── globals.css
+│   ├── layout.tsx
+│   └── page.tsx
+├── components/
 │   ├── chat/
-│   │   ├── ChatInput.tsx        # Message input component
-│   │   ├── ChatList.tsx         # List of chat rooms
-│   │   ├── ChatMessage.tsx      # Individual message component
-│   │   ├── ChatRoom.tsx         # Chat room component
-│   │   ├── CreateChatRoom.tsx   # Form to create a new chat room
-│   │   └── MessageList.tsx      # List of messages
+│   │   ├── ChatInput.tsx
+│   │   ├── ChatList.tsx
+│   │   ├── ChatMessage.tsx
+│   │   ├── ChatRoom.tsx
+│   │   ├── CreateChatRoom.tsx
+│   │   └── MessageList.tsx
 │   ├── layouts/
-│   │   ├── ChatLayout.tsx       # Layout for chat pages
-│   │   ├── MainLayout.tsx       # Main application layout
-│   │   └── Sidebar.tsx          # Sidebar component
+│   │   ├── ChatLayout.tsx
+│   │   ├── MainLayout.tsx
+│   │   └── Sidebar.tsx
 │   └── ui/
-│       ├── Avatar.tsx           # User avatar component
-│       ├── Button.tsx           # Button component
-│       ├── Input.tsx            # Input component
-│       ├── Loading.tsx          # Loading spinner component
-│       ├── Modal.tsx            # Modal component
-│       └── ThemeToggle.tsx      # Theme toggle component
-├── hooks/                       # Custom React hooks
-│   ├── useAuth.ts               # Authentication hook
-│   ├── useChatRoom.ts           # Chat room data hook
-│   ├── useChatRooms.ts          # Multiple chat rooms hook
-│   └── useSocket.ts             # Socket.io hook
-├── lib/                         # Utility functions and libraries
-│   ├── prisma.ts                # Prisma client
-│   ├── socket.ts                # Socket.io client setup
-│   └── utils.ts                 # Utility functions
-├── providers/                   # React context providers
-│   ├── SessionProvider.tsx      # NextAuth session provider
-│   └── ThemeProvider.tsx        # Theme provider
-├── types/                       # TypeScript type definitions
-│   ├── index.ts                 # Shared types
-│   └── next-auth.d.ts           # NextAuth type extensions
-├── middleware.ts                # Next.js middleware for auth protection
-├── next.config.js               # Next.js configuration
-├── tailwind.config.js           # Tailwind CSS configuration
-└── tsconfig.json                # TypeScript configuration
+│       ├── Avatar.tsx
+│       ├── Button.tsx
+│       ├── Input.tsx
+│       ├── Loading.tsx
+│       ├── Modal.tsx
+│       └── ThemeToggle.tsx
+├── hooks/
+│   ├── useAuth.ts
+│   ├── useChatRoom.ts
+│   ├── useChatRooms.ts
+│   └── useSocket.ts
+├── lib/
+│   ├── prisma.ts
+│   ├── socket.ts
+│   └── utils.ts
+├── providers/
+│   ├── SessionProvider.tsx
+│   └── ThemeProvider.tsx
+├── types/
+│   ├── index.ts
+│   └── next-auth.d.ts
+├── middleware.ts
+├── next.config.js
+├── tailwind.config.js
+└── tsconfig.json

@@ -3,7 +3,7 @@
 import { formatDistanceToNow } from 'date-fns';
 import { motion } from 'framer-motion';
 import { SafeMessage } from '@/types';
-import Avatar from './ui/Avatar';
+import Avatar from '../ui/Avatar';
 
 type ChatMessageProps = {
   message: SafeMessage;

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { useSocket } from '@/hooks/useSocket';
 import { SafeChatRoom, SafeMessage } from '@/types';
-import ChatMessage from '@/components/ChatMessage';
+import ChatMessage from '@/components/chat/ChatMessage';
 import ChatInput from '@/components/chat/ChatInput';
 import { Users, Settings } from 'lucide-react';
 import { motion } from 'framer-motion';

@@ -69,7 +69,7 @@ export default function SignUp() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
+    <div className="min-h-screen w-[500px] flex items-center justify-center bg-gray-100 dark:bg-gray-900">
       <div className="absolute top-4 right-4">
         <ThemeToggle />
       </div>
@@ -161,13 +161,6 @@ export default function SignUp() {
           </div>
 
           <div className="mt-6 grid grid-cols-2 gap-3">
-            <button
-              onClick={() => signIn('github', { callbackUrl: '/' })}
-              className="bg-gray-900 hover:bg-gray-800 text-white py-2 px-4 rounded-md transition duration-200 flex items-center justify-center"
-            >
-              {/* <FcGithub className="h-5 w-5 mr-2" /> */}
-              GitHub
-            </button>
             <button
               onClick={() => signIn('google', { callbackUrl: '/' })}
               className="bg-white hover:bg-gray-100 text-gray-900 border border-gray-300 py-2 px-4 rounded-md transition duration-200 flex items-center justify-center"

@@ -28,10 +28,9 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <MainLayout >
-              <Sidebar />
+            {/* <MainLayout > */}
             {children}
-            </MainLayout>
+            {/* </MainLayout> */}
           </ThemeProvider>
         </SessionProvider>
       </body>

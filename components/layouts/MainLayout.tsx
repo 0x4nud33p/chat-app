@@ -72,9 +72,8 @@ export default function MainLayout({ children }: MainLayoutProps) {
               </nav>
             </div>
 
-            {/* User menu and theme toggle */}
             <div className="flex items-center">
-              <ThemeToggle />
+              {/* <ThemeToggle /> */}
               
               {session?.user && (
                 <div className="ml-4 flex items-center">

@@ -54,7 +54,6 @@ export default function Sidebar({ onSelectChatRoom }: SidebarProps) {
 
   return (
     <div className="flex flex-col h-full">
-      {/* Header */}
       <div className="p-4 border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center justify-between mb-4">
           <h1 className="text-lg font-bold text-blue-600 dark:text-blue-400">ChatApp</h1>
@@ -81,7 +80,6 @@ export default function Sidebar({ onSelectChatRoom }: SidebarProps) {
         </div>
       </div>
 
-      {/* Chat list */}
       <div className="flex-1 overflow-y-auto py-2">
         {isLoading ? (
           <div className="flex justify-center py-4">
@@ -125,7 +123,6 @@ export default function Sidebar({ onSelectChatRoom }: SidebarProps) {
         )}
       </div>
 
-      {/* User profile */}
       {session?.user && (
         <div className="p-4 border-t border-gray-200 dark:border-gray-700">
           <div className="flex items-center justify-between">
@@ -160,7 +157,6 @@ export default function Sidebar({ onSelectChatRoom }: SidebarProps) {
         </div>
       )}
 
-      {/* Create chat room modal */}
       <CreateChatRoom 
         isOpen={isCreateModalOpen} 
         onClose={() => setIsCreateModalOpen(false)} 

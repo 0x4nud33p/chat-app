@@ -3,6 +3,8 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/providers/ThemeProvider';
 import SessionProvider from '@/providers/SessionProvider';
+import MainLayout from '@/components/layouts/MainLayout';
+import Sidebar from '@/components/layouts/Sidebar';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -26,7 +28,10 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
+            <MainLayout >
+              <Sidebar />
             {children}
+            </MainLayout>
           </ThemeProvider>
         </SessionProvider>
       </body>

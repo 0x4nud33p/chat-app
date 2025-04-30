@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "../../auth/[...nextauth]/route";
-import prisma from "@/lib/prisma";
+import getUserSession from "@/utils/getUserData";
+import prisma from "@/prisma/index";
 
 export async function GET(
   request: Request,
@@ -9,7 +9,7 @@ export async function GET(
 ) {
   try {
     const { chatRoomId } = params;
-    const session = await getServerSession(authOptions);
+    const session = await getUserSession();
     
     if (!session?.user?.id) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -57,7 +57,7 @@ export async function PATCH(
 ) {
   try {
     const { chatRoomId } = params;
-    const session = await getServerSession(authOptions);
+    const session = await getUserSession();
     
     if (!session?.user?.id) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -107,7 +107,7 @@ export async function DELETE(
 ) {
   try {
     const { chatRoomId } = params;
-    const session = await getServerSession(authOptions);
+    const session = await getUserSession();
     
     if (!session?.user?.id) {
       return new NextResponse("Unauthorized", { status: 401 });

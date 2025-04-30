@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "../../../auth/[...nextauth]/route";
-import prisma from "@/lib/prisma";
+import prisma from "@/prisma/index";
+import getUserSession from "@/utils/getUserData";
 
 export async function POST(
   request: Request,
@@ -9,7 +9,7 @@ export async function POST(
 ) {
   try {
     const { chatRoomId } = params;
-    const session = await getServerSession(authOptions);
+    const session = await getUserSession();
     
     if (!session?.user?.id) {
       return new NextResponse("Unauthorized", { status: 401 });

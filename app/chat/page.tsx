@@ -3,10 +3,10 @@
 import ChatLayout from '@/components/layouts/ChatLayout';
 import { motion } from 'framer-motion';
 import { MessageSquare } from 'lucide-react';
-import { useSession } from 'next-auth/react';
+import { useAuth } from "@/hooks/useAuth";
 
 export default function ChatPage() {
-  const { data: session } = useSession();
+  const { user, isLoading } = useAuth();
 
   return (
     <div className="flex-1 flex flex-col items-center justify-center">
@@ -20,7 +20,7 @@ export default function ChatPage() {
         </div>
         <h1 className="text-2xl font-bold mb-2">Welcome to Chat App</h1>
         <p className="text-gray-600 dark:text-gray-400 mb-6">
-          {session?.user?.name ? `Hello ${session.user.name}!` : 'Hello!'} Select a chat room from the sidebar or create a new one to start chatting.
+          {user?.name ? `Hello ${user.name}!` : 'Hello!'} Select a chat room from the sidebar or create a new one to start chatting.
         </p>
       </motion.div>
     </div>

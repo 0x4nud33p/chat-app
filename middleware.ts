@@ -18,5 +18,6 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [""],
+  matcher: ["/chat", "/chat/:path*"],
+  // Only run middleware on the chat routes
 };

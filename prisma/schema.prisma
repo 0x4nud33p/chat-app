@@ -29,8 +29,8 @@ model User {
 
 model Account {
   id                    String   @id @default(uuid())
-  provider              String   
-  providerAccountId     String   
+  accountId             String
+  providerId            String    
   userId                String
   user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   accessToken           String?
@@ -82,4 +82,15 @@ model Message {
   chatRoomId String
   user       User     @relation(fields: [userId], references: [id])
   chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id])
+}
+
+model Verification {
+  id         String    @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@map("verification")
 }

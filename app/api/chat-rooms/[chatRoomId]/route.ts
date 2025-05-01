@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth/next";
 import getUserSession from "@/utils/getUserData";
 import prisma from "@/prisma/index";
 

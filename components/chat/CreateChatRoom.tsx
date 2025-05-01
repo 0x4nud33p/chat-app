@@ -3,8 +3,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
-import { motion } from 'framer-motion';
-import { X } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import Modal from '@/components/ui/Modal';
@@ -57,7 +55,6 @@ export default function CreateChatRoom({ isOpen, onClose }: CreateChatRoomProps)
       setIsPrivate(false);
       onClose();
       
-      // Navigate to the new chat room
       router.push(`/chat/${data.id}`);
       router.refresh();
     } catch (error) {
@@ -70,17 +67,11 @@ export default function CreateChatRoom({ isOpen, onClose }: CreateChatRoomProps)
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <div className="p-6">
+      <div>
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-semibold">Create New Chat Room</h2>
-          <button 
-            onClick={onClose}
-            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
-          >
-            <X className="h-5 w-5" />
-          </button>
         </div>
-        
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="name" className="block text-sm font-medium mb-1">
@@ -96,9 +87,12 @@ export default function CreateChatRoom({ isOpen, onClose }: CreateChatRoomProps)
               required
             />
           </div>
-          
+
           <div>
-            <label htmlFor="description" className="block text-sm font-medium mb-1">
+            <label
+              htmlFor="description"
+              className="block text-sm font-medium mb-1"
+            >
               Description (optional)
             </label>
             <Input
@@ -110,7 +104,7 @@ export default function CreateChatRoom({ isOpen, onClose }: CreateChatRoomProps)
               disabled={isLoading}
             />
           </div>
-          
+
           <div className="flex items-center">
             <input
               id="isPrivate"
@@ -124,21 +118,19 @@ export default function CreateChatRoom({ isOpen, onClose }: CreateChatRoomProps)
               Make this room private
             </label>
           </div>
-          
-          <div className="pt-4 flex justify-end space-x-3">
-            <Button 
-              type="button" 
-              variant="outline" 
+
+          <div className="pt-4 flex justify-end space-x-3 text-black">
+            <Button
+              type="button"
+              variant="outline"
               onClick={onClose}
               disabled={isLoading}
+              className="text-black"
             >
               Cancel
             </Button>
-            <Button 
-              type="submit" 
-              disabled={isLoading}
-            >
-              {isLoading ? 'Creating...' : 'Create Room'}
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? "Creating..." : "Create Room"}
             </Button>
           </div>
         </form>

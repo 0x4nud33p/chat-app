@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { useParams } from 'next/navigation';
-import { useSession } from 'next-auth/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Users, Settings } from 'lucide-react';
 import Link from 'next/link';
@@ -14,10 +13,11 @@ import MessageList from '@/components/chat/MessageList';
 import { useSocket } from '@/hooks/useSocket';
 import { useChatRoom } from '@/hooks/useChatRoom';
 import { SafeMessage, SafeUser } from '@/types';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function ChatRoomPage() {
   const { chatRoomId } = useParams();
-  const { data: session } = useSession();
+  const { user } = useAuth();
   const { chatRoom, isLoading, error } = useChatRoom(chatRoomId as string);
   const { isConnected, messages: socketMessages, sendMessage, socket } = useSocket({ chatRoomId: chatRoomId as string });
   const [messages, setMessages] = useState<SafeMessage[]>([]);
@@ -71,7 +71,7 @@ export default function ChatRoomPage() {
   }, [messages]);
 
   const handleSend = (content: string) => {
-    if (content.trim() && session?.user) {
+    if (content.trim() && user) {
       // In a real app, you'd save to the database first
       sendMessage(content);
     }
@@ -120,7 +120,7 @@ export default function ChatRoomPage() {
           >
             <Users size={20} />
           </Button>
-          {session?.user?.id === chatRoom.ownerId && (
+          {user?.id === chatRoom.ownerId && (
             <Button 
               variant="ghost" 
               size="icon"
@@ -138,7 +138,7 @@ export default function ChatRoomPage() {
         <div className="flex-1 overflow-y-auto p-4">
           <MessageList 
             messages={messages} 
-            currentUser={session?.user}
+            currentUser={user as SafeUser}
           />
           <div ref={messagesEndRef} />
         </div>

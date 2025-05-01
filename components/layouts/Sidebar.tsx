@@ -3,8 +3,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { signOut, useSession } from 'next-auth/react';
-import { motion } from 'framer-motion';
 import { Plus, Settings, LogOut, Search } from 'lucide-react';
 import Avatar from '@/components/ui/Avatar';
 import ThemeToggle from '@/components/ui/ThemeToggle';
@@ -13,6 +11,7 @@ import Input from '@/components/ui/Input';
 import CreateChatRoom from '@/components/chat/CreateChatRoom';
 import { useChatRooms } from '@/hooks/useChatRooms';
 import { SafeChatRoom } from '@/types';
+import { useAuth } from '@/hooks/useAuth';
 
 type SidebarProps = {
   onSelectChatRoom?: () => void;
@@ -21,7 +20,7 @@ type SidebarProps = {
 export default function Sidebar({ onSelectChatRoom }: SidebarProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const { data: session } = useSession();
+  const { user, signOut, isLoading: isAuthLoading } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
   const { chatRooms, isLoading, error } = useChatRooms();
@@ -43,7 +42,7 @@ export default function Sidebar({ onSelectChatRoom }: SidebarProps) {
   }, [searchQuery, chatRooms]);
 
   const handleSignOut = async () => {
-    await signOut({ callbackUrl: '/auth/signin' });
+    await signOut();
   };
 
   const handleRoomSelect = () => {
@@ -61,7 +60,7 @@ export default function Sidebar({ onSelectChatRoom }: SidebarProps) {
             <ThemeToggle />
             <button 
               onClick={() => setIsCreateModalOpen(true)} 
-              className="p-2 rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-400 dark:hover:bg-blue-800"
+              className="p-2 rounded-full hover:cursor-pointer bg-blue-100 text-blue-600 hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-400 dark:hover:bg-blue-800"
             >
               <Plus className="h-5 w-5" />
             </button>
@@ -123,32 +122,32 @@ export default function Sidebar({ onSelectChatRoom }: SidebarProps) {
         )}
       </div>
 
-      {session?.user && (
+      {user && (
         <div className="p-4 border-t border-gray-200 dark:border-gray-700">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <Avatar
-                src={session.user.image || null}
-                name={session.user.name || 'User'}
+                src={user?.image || null}
+                name={user.name || 'User'}
                 isOnline={true}
               />
               <div className="ml-3 overflow-hidden">
-                <p className="font-medium truncate">{session.user.name}</p>
+                <p className="font-medium truncate">{user.name}</p>
                 <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
-                  {session.user.email}
+                  {user.email}
                 </p>
               </div>
             </div>
             <div className="flex gap-1">
               <button 
                 onClick={() => router.push('/profile')}
-                className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+                className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer"
               >
                 <Settings className="h-5 w-5" />
               </button>
               <button 
                 onClick={handleSignOut}
-                className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+                className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer"
               >
                 <LogOut className="h-5 w-5" />
               </button>

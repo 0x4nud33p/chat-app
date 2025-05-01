@@ -45,7 +45,7 @@ export default function Modal({
           >
             {showClose && (
               <button
-                className="absolute right-4 top-4 text-gray-500 hover:text-gray-800"
+                className="absolute right-4 top-4 text-gray-500 hover:text-gray-800 hover:cursor-pointer"
                 onClick={onClose}
               >
                 <X size={20} />

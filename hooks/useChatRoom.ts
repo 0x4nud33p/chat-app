@@ -1,16 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { SafeChatRoom } from '@/types';
+import { useAuth } from './useAuth';
 
 export const useChatRoom = (chatRoomId: string) => {
   const [chatRoom, setChatRoom] = useState<SafeChatRoom | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { data: session } = useSession();
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchChatRoom = async () => {
-      if (!chatRoomId || !session?.user?.id) {
+      if (!chatRoomId || !user?.id) {
         setIsLoading(false);
         return;
       }
@@ -36,10 +37,10 @@ export const useChatRoom = (chatRoomId: string) => {
     };
 
     fetchChatRoom();
-  }, [chatRoomId, session?.user?.id]);
+  }, [chatRoomId, user?.id]);
 
   const refreshChatRoom = async () => {
-    if (!chatRoomId || !session?.user?.id) return;
+    if (!chatRoomId || !user?.id) return;
     
     try {
       setIsLoading(true);

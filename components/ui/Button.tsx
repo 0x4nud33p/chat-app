@@ -31,7 +31,7 @@ export default function Button<T extends ElementType = 'button'>({
   const variants = {
     primary: 'bg-blue-600 hover:bg-blue-700 text-white shadow-sm',
     secondary: 'bg-gray-200 hover:bg-gray-300 text-gray-900 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white',
-    outline: 'border border-gray-300 hover:bg-gray-100 text-gray-900 dark:border-gray-600 dark:hover:bg-gray-800 dark:text-white',
+    outline: 'border text-red-400 border-gray-300 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-800 dark:text-white',
     ghost: 'hover:bg-gray-100 text-gray-700 dark:hover:bg-gray-800 dark:text-gray-300',
     danger: 'bg-red-600 hover:bg-red-700 text-white',
   };

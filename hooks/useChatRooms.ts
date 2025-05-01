@@ -1,15 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { SafeChatRoom } from '@/types';
+import { useAuth } from './useAuth';
 
 export const useChatRooms = () => {
   const [chatRooms, setChatRooms] = useState<SafeChatRoom[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { data: session } = useSession();
+  const {user} = useAuth();
 
   const fetchChatRooms = async () => {
-    if (!session?.user) return;
+    if (!user) return;
     
     try {
       setIsLoading(true);
@@ -20,7 +21,7 @@ export const useChatRooms = () => {
       if (!response.ok) {
         throw new Error('Failed to fetch chat rooms');
       }
-      
+      console.log("response while fetching chata",response);
       const data = await response.json();
       setChatRooms(data);
     } catch (error) {
@@ -33,7 +34,7 @@ export const useChatRooms = () => {
 
   useEffect(() => {
     fetchChatRooms();
-  }, [session]);
+  }, [user]);
 
   const createChatRoom = async (formData: { name: string; description?: string; isPrivate?: boolean }) => {
     if (!session?.user) return null;

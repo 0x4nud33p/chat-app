@@ -9,7 +9,7 @@ export async function GET() {
     if (!session?.user?.id) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
-    
+    console.log("get trigged and sessoin",session.user.id);
     const chatRooms = await prisma.chatRoom.findMany({
       where: {
         OR: [
@@ -28,7 +28,7 @@ export async function GET() {
         }
       }
     });
-    
+    console.log("chat rooms in the server",chatRooms);
     return NextResponse.json(chatRooms);
   } catch (error) {
     console.log("[CHAT_ROOMS_GET]", error);

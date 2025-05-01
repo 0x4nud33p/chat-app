@@ -28,11 +28,11 @@ export default function Sidebar({ onSelectChatRoom }: SidebarProps) {
 
   // Filter chat rooms based on search query
   useEffect(() => {
+    console.log('Filtering chat rooms...',chatRooms, searchQuery);
     if (!chatRooms) {
       setFilteredRooms([]);
       return;
     }
-
     const filtered = chatRooms.filter(room => 
       room.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (room.description?.toLowerCase().includes(searchQuery.toLowerCase()))

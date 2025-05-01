@@ -7,7 +7,7 @@ export async function GET(
   { params }: { params: { chatRoomId: string } }
 ) {
   try {
-    const { chatRoomId } = params;
+    const { chatRoomId } = await params;
     const session = await getUserSession();
     
     if (!session?.user?.id) {

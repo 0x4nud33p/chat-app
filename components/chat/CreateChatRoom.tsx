@@ -122,14 +122,13 @@ export default function CreateChatRoom({ isOpen, onClose }: CreateChatRoomProps)
           <div className="pt-4 flex justify-end space-x-3 text-black">
             <Button
               type="button"
-              variant="outline"
+              className="bg-red-500 hover:bg-red-500 hover:cursor-pointer"
               onClick={onClose}
               disabled={isLoading}
-              className="text-black"
             >
               Cancel
             </Button>
-            <Button type="submit" disabled={isLoading}>
+            <Button type="submit" disabled={isLoading} className="bg-blue-500 hover:bg-blue-600 hover:cursor-pointer">
               {isLoading ? "Creating..." : "Create Room"}
             </Button>
           </div>

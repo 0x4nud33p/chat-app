@@ -43,7 +43,8 @@ export default function CreateChatRoom({ isOpen, onClose }: CreateChatRoomProps)
       });
       
       if (!response.ok) {
-        throw new Error('Failed to create chat room');
+        toast('Room already exits try to join the room');
+        return;
       }
       
       const data = await response.json();

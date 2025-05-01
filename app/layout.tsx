@@ -21,18 +21,18 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <SessionProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {/* <MainLayout > */}
-            {children}
-            {/* </MainLayout> */}
-          </ThemeProvider>
-        </SessionProvider>
+          <SessionProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {/* <MainLayout > */}
+              {children}
+              {/* </MainLayout> */}
+            </ThemeProvider>
+          </SessionProvider>
       </body>
     </html>
   );

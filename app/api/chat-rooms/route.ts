@@ -9,7 +9,7 @@ export async function GET() {
     if (!session?.user?.id) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
-    console.log("get trigged and sessoin",session.user.id);
+
     const chatRooms = await prisma.chatRoom.findMany({
       where: {
         OR: [
@@ -28,7 +28,6 @@ export async function GET() {
         }
       }
     });
-    console.log("chat rooms in the server",chatRooms);
     return NextResponse.json(chatRooms);
   } catch (error) {
     console.log("[CHAT_ROOMS_GET]", error);
@@ -40,39 +39,43 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const session = await getUserSession();
-    
+
     if (!session?.user?.id) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
-    
-    const body = await request.json();
-    const { name, description, isPrivate } = body;
-    
-    if (!name) {
+
+    const { name, description, isPrivate } = await request.json();
+
+    if (!name || typeof name !== "string") {
       return new NextResponse("Name is required", { status: 400 });
     }
-    
+
+    const existingChatRoom = await prisma.chatRoom.findFirst({
+      where: {
+        name,
+        ownerId: session.user.id,
+      },
+    });
+
+    if (existingChatRoom) {
+      return new NextResponse("Chat Room Already Exists", { status: 403 });
+    }
+
     const chatRoom = await prisma.chatRoom.create({
       data: {
         name,
-        description,
-        isPrivate: isPrivate || false,
-        owner: {
-          connect: {
-            id: session.user.id
-          }
-        },
+        description: description || "",
+        isPrivate: isPrivate ?? false,
+        ownerId: session.user.id,
         members: {
-          connect: {
-            id: session.user.id
-          }
-        }
-      }
+          connect: [{ id: session.user.id }],
+        },
+      },
     });
-    
+
     return NextResponse.json(chatRoom);
   } catch (error) {
-    console.log("[CHAT_ROOMS_POST]", error);
+    console.error("[CHAT_ROOMS_POST]", error);
     return new NextResponse("Internal Error", { status: 500 });
   }
 }

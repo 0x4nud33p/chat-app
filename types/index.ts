@@ -21,3 +21,9 @@ export type SafeMessage = Omit<Message, "createdAt" | "updatedAt"> & {
   updatedAt: string;
   user: SafeUser;
 };
+
+export type UserStatus = {
+  userId: string;
+  status: boolean;
+};
+

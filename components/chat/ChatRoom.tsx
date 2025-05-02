@@ -72,22 +72,20 @@ export default function ChatRoom({ onBack, isMobile = false }: ChatRoomProps) {
       {/* Header */}
       <div className="flex items-center p-4 border-b border-gray-200 dark:border-gray-800">
         {isMobile && (
-          <button 
-            onClick={onBack} 
+          <button
+            onClick={onBack}
             className="mr-2 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
           >
             <ChevronLeft className="h-5 w-5" />
           </button>
         )}
         <div className="flex items-center">
-          <Avatar 
-            src={null} 
-            name={chatRoom.name} 
-          />
+          <Avatar src={null} name={chatRoom.name} />
           <div className="ml-3">
             <h2 className="font-semibold">{chatRoom.name}</h2>
             <p className="text-xs text-gray-500 dark:text-gray-400">
-              {chatRoom.members.length} members • {isConnected ? 'Connected' : 'Disconnected'}
+              {chatRoom.members.length} members •{" "}
+              {isConnected ? "Connected" : "Disconnected"}
             </p>
           </div>
         </div>
@@ -104,12 +102,11 @@ export default function ChatRoom({ onBack, isMobile = false }: ChatRoomProps) {
         ) : (
           <>
             {allMessages.map((message, index) => (
-              <MessageBubble 
-                key={message.id || `temp-${index}`} 
-                message={message} 
+              <MessageBubble
+                key={message.id || `temp-${index}`}
+                message={message}
                 isConsecutive={
-                  index > 0 && 
-                  allMessages[index - 1].userId === message.userId
+                  index > 0 && allMessages[index - 1].userId === message.userId
                 }
               />
             ))}
@@ -119,8 +116,8 @@ export default function ChatRoom({ onBack, isMobile = false }: ChatRoomProps) {
       </div>
 
       {/* Input */}
-      <div className="p-4 border-t border-gray-200 dark:border-gray-800">
-        <ChatInput onSend={sendMessage} />
+      <div className="border-t border-gray-200 dark:border-gray-800">
+        <ChatInput onSendMessage={sendMessage} />
       </div>
     </div>
   );

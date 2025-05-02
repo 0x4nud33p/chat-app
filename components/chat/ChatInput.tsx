@@ -41,7 +41,7 @@ export default function ChatInput({ onSendMessage, isLoading = false }: ChatInpu
   };
 
   return (
-    <div className="border-t border-gray-200 dark:border-gray-800 p-4">
+    <div className="border-t border-gray-200 dark:border-gray-800">
       <div className="flex items-end gap-2 bg-gray-100 dark:bg-gray-800 rounded-lg p-2">
         <textarea
           ref={textareaRef}
@@ -52,7 +52,7 @@ export default function ChatInput({ onSendMessage, isLoading = false }: ChatInpu
           className="flex-1 resize-none bg-transparent border-none outline-none max-h-32 py-2 px-3"
           rows={1}
         />
-        <motion.button
+        <motion.button  
           whileTap={{ scale: 0.9 }}
           onClick={handleSendMessage}
           disabled={isLoading || !message.trim()}

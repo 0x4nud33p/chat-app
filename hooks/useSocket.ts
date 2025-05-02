@@ -1,8 +1,7 @@
-// hooks/useSocket.ts
 import { useEffect, useState, useRef } from 'react';
-import { io, Socket } from 'socket.io-client';
-import { useSession } from 'next-auth/react';
-import { SafeMessage, UserStatus, TypingIndicator } from '@/types';
+import io, { Socket } from 'socket.io-client';
+import { useAuth } from './useAuth';
+import { SafeMessage, UserStatus } from '@/types';
 
 type UseSocketProps = {
   chatRoomId?: string;
@@ -13,11 +12,10 @@ export const useSocket = ({ chatRoomId }: UseSocketProps = {}) => {
   const [messages, setMessages] = useState<SafeMessage[]>([]);
   const [userStatuses, setUserStatuses] = useState<Record<string, boolean>>({});
   const [typingUsers, setTypingUsers] = useState<string[]>([]);
-  const socketRef = useRef<Socket | null>(null);
-  const { data: session } = useSession();
+  const socketRef = useRef<ReturnType<typeof io> | null>(null);
+  const { user } = useAuth();
 
   useEffect(() => {
-    // Initialize socket connection
     const socket = io(process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:3000');
     socketRef.current = socket;
 
@@ -26,8 +24,8 @@ export const useSocket = ({ chatRoomId }: UseSocketProps = {}) => {
       setIsConnected(true);
       
       // Set user as online
-      if (session?.user?.id) {
-        socket.emit('user-online', session.user.id);
+      if (user?.id) {
+        socket.emit('user-online', user.id);
       }
     });
 
@@ -45,12 +43,12 @@ export const useSocket = ({ chatRoomId }: UseSocketProps = {}) => {
 
     return () => {
       // Set user as offline before disconnecting
-      if (session?.user?.id) {
-        socket.emit('user-offline', session.user.id);
+      if (user?.id) {
+        socket.emit('user-offline', user.id);
       }
       socket.disconnect();
     };
-  }, [session]);
+  }, [user]);
 
   // Join chat room when chatRoomId changes
   useEffect(() => {
@@ -67,13 +65,13 @@ export const useSocket = ({ chatRoomId }: UseSocketProps = {}) => {
     });
     
     // Listen for typing indicators
-    socket.on('user-typing', ({ userId }: TypingIndicator) => {
-      if (userId !== session?.user?.id) {
+    socket.on('user-typing', ({ userId }: { userId: string }) => {
+      if (userId !== user?.id) {
         setTypingUsers(prev => [...prev.filter(id => id !== userId), userId]);
       }
     });
 
-    socket.on('user-stop-typing', ({ userId }: TypingIndicator) => {
+    socket.on('user-stop-typing', ({ userId }: { userId: string }) => {
       setTypingUsers(prev => prev.filter(id => id !== userId));
     });
     
@@ -84,11 +82,11 @@ export const useSocket = ({ chatRoomId }: UseSocketProps = {}) => {
       socket.off('user-typing');
       socket.off('user-stop-typing');
     };
-  }, [chatRoomId, session]);
+  }, [chatRoomId, user]);
 
   // Function to send message
   const sendMessage = async (content: string) => {
-    if (!socketRef.current || !chatRoomId || !session?.user) return;
+    if (!socketRef.current || !chatRoomId || !user) return;
     
     try {
       // Save message to database
@@ -118,14 +116,14 @@ export const useSocket = ({ chatRoomId }: UseSocketProps = {}) => {
 
   // Function to indicate typing
   const sendTypingIndicator = () => {
-    if (!socketRef.current || !chatRoomId || !session?.user?.id) return;
-    socketRef.current.emit('typing', { userId: session.user.id, chatRoomId });
+    if (!socketRef.current || !chatRoomId || !user?.id) return;
+    socketRef.current.emit('typing', { userId: user.id, chatRoomId });
   };
 
   // Function to stop typing indication
   const sendStopTypingIndicator = () => {
-    if (!socketRef.current || !chatRoomId || !session?.user?.id) return;
-    socketRef.current.emit('stop-typing', { userId: session.user.id, chatRoomId });
+    if (!socketRef.current || !chatRoomId || !user?.id) return;
+    socketRef.current.emit('stop-typing', { userId: user.id, chatRoomId });
   };
 
   return {

@@ -12,6 +12,8 @@ export default function Home() {
   useEffect(() => {
     if (!isLoading && !user) {
       router.push("/auth/signin");
+    } else {
+      router.push("/chat");
     }
   }, [user, isLoading, router]);
 

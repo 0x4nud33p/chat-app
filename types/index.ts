@@ -10,6 +10,7 @@ export type SafeChatRoom = Omit<ChatRoom, "createdAt" | "updatedAt"> & {
   updatedAt: string;
   owner: SafeUser;
   members: SafeUser[];
+  messages: SafeMessage[];
   _count: {
     messages: number;
     members: number;

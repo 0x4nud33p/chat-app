@@ -22,15 +22,17 @@ export const useSocket = ({ chatRoomId }: UseSocketProps = {}) => {
     // Event handlers
     socket.on('connect', () => {
       setIsConnected(true);
-      
+      console.log("socket connected",socket.id);
       // Set user as online
       if (user?.id) {
         socket.emit('user-online', user.id);
+        console.log("user onlie",user.id);
       }
     });
 
     socket.on('disconnect', () => {
       setIsConnected(false);
+      console.log("socket disconnected");
     });
 
     // Listen for user status changes
@@ -58,10 +60,11 @@ export const useSocket = ({ chatRoomId }: UseSocketProps = {}) => {
     
     // Join the room
     socket.emit('join-room', chatRoomId);
-    
+    console.log("chat room joined",chatRoomId);
     // Listen for new messages
     socket.on('new-message', (newMessage: SafeMessage) => {
       setMessages(prev => [...prev, newMessage]);
+      console.log("new messages",newMessage);
     });
     
     // Listen for typing indicators
@@ -97,7 +100,7 @@ export const useSocket = ({ chatRoomId }: UseSocketProps = {}) => {
         },
         body: JSON.stringify({ content }),
       });
-      
+      console.log("response from sending messages api call",response);
       if (!response.ok) {
         throw new Error('Failed to send message');
       }

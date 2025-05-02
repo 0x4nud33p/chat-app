@@ -2,7 +2,7 @@ import { Server } from 'socket.io';
 import type { NextApiRequest } from 'next';
 import type { NextApiResponseServerIO } from '@/types/next';
 
-export default function handler(req: NextApiRequest, res: NextApiResponseServerIO) {
+export async function GET(req: NextApiRequest, res: NextApiResponseServerIO) {
   if (res.socket.server.io) {
     console.log('Socket is already running');
     res.end();
@@ -16,7 +16,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponseServerI
 
   res.socket.server.io = io;
 
-  io.on('connection', socket => {
+  io.on('connection', (socket) => {
     console.log('Socket connected:', socket.id);
 
     socket.on('send-message', (msg) => {

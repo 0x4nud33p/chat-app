@@ -20,6 +20,7 @@ export async function GET() {
       include: {
         owner: true,
         members: true,
+        messages: true,
         _count: {
           select: {
             messages: true,

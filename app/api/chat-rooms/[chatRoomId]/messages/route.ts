@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth/next";
 import prisma from "@/prisma/index";
 import getUserSession from "@/utils/getUserData";
 
@@ -8,7 +7,7 @@ export async function POST(
   { params }: { params: { chatRoomId: string } }
 ) {
   try {
-    const { chatRoomId } = params;
+    const { chatRoomId } = await params;
     const session = await getUserSession();
     
     if (!session?.user?.id) {
@@ -17,7 +16,7 @@ export async function POST(
     
     const body = await request.json();
     const { content } = body;
-    
+    console.log("message content from sending message inthe api call",content);
     if (!content) {
       return new NextResponse("Content is required", { status: 400 });
     }

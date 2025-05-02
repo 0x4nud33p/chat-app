@@ -28,6 +28,8 @@ export default function ChatRoomPage() {
 
   // Combine initial messages from API with real-time messages from socket
   useEffect(() => {
+    console.log("current chat room",chatRoom);
+    console.log("current chat room messages", chatRoom?.messages);
     if (chatRoom?.messages) {
       const combinedMessages = [...chatRoom.messages];
       

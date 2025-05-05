@@ -54,25 +54,29 @@ export async function GET(
       },
     });
     
-    // Get chat rooms the user is a member of
+    // Get chat rooms the user is a member of 
     const chatRoomMembers = await prisma.chatRoom.findMany({
-        where: {
-            members: {
-                
-            }
-        }
+      where: {
+        members: {
+          some: {
+            id: userId
+          },
+        },
+      },
+      include: {
+        members: true,
+      },
     });
-    
+
+        
     // Transform the data to get the chat rooms
     const recentRooms = chatRoomMembers.map(member => {
-      const { chatRoom } = member;
       return {
-        id: chatRoom.id,
-        name: chatRoom.name,
-        imageUrl: chatRoom.imageUrl,
-        description: chatRoom.description,
-        members: chatRoom.members,
-        // Add any other fields needed for the UI
+        id: member.id,
+        name: member.name,
+        imageUrl: member.image,
+        description: member.description,
+        members: member.members,
       };
     });
     

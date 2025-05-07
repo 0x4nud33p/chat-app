@@ -16,7 +16,7 @@ export async function POST(
     
     const body = await request.json();
     const { content } = body;
-    console.log("message content from sending message inthe api call",content);
+    
     if (!content) {
       return new NextResponse("Content is required", { status: 400 });
     }

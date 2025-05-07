@@ -74,7 +74,6 @@ export default function ChatRoomPage() {
 
   const handleSend = (content: string) => {
     if (content.trim() && user) {
-      // In a real app, you'd save to the database first
       sendMessage(content);
     }
   };
@@ -100,7 +99,6 @@ export default function ChatRoomPage() {
 
   return (
     <div className="flex flex-col h-full">
-      {/* Chat room header */}
       <header className="px-4 py-3 bg-white dark:bg-gray-800 shadow-sm z-10 flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <Link href="/chat" className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700">

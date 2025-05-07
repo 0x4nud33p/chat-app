@@ -100,7 +100,7 @@ export const useSocket = ({ chatRoomId }: UseSocketProps = {}) => {
         },
         body: JSON.stringify({ content }),
       });
-      console.log("response from sending messages api call",response);
+      
       if (!response.ok) {
         throw new Error('Failed to send message');
       }

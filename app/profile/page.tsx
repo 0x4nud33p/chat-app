@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
 import Link from "next/link";
 import {
   Mail,
@@ -107,7 +106,6 @@ export default function ProfilePage() {
         className="max-w-6xl mx-auto"
       >
         <div className="bg-white/5 backdrop-blur-md rounded-lg shadow overflow-hidden">
-          {/* Profile Header */}
           <div className="h-48 bg-gradient-to-r from-indigo-600 to-purple-700 relative">
             <div className="absolute -bottom-16 left-8">
               <Avatar
@@ -119,7 +117,6 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          {/* Profile Info */}
           <div className="pt-20 px-8 pb-8">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
               <div>
@@ -154,7 +151,6 @@ export default function ProfilePage() {
               </div>
             )}
 
-            {/* Tabs Navigation */}
             <div className="border-b border-gray-700 mb-6">
               <nav className="flex space-x-8">
                 <button
@@ -190,11 +186,9 @@ export default function ProfilePage() {
               </nav>
             </div>
 
-            {/* Tab Content */}
             {activeTab === "overview" && (
               <div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* User Stats */}
                   <div className="bg-white/10 p-6 rounded-lg">
                     <h3 className="text-lg font-semibold mb-4">Stats</h3>
                     <div className="grid grid-cols-2 gap-4">
@@ -215,7 +209,6 @@ export default function ProfilePage() {
                     </div>
                   </div>
 
-                  {/* Recent Activity */}
                   <div className="bg-white/10 p-6 rounded-lg">
                     <h3 className="text-lg font-semibold mb-4">
                       Recent Activity

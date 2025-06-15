@@ -9,6 +9,7 @@ import { SafeChatRoom } from '@/types';
 import Avatar from '@/components/ui/Avatar';
 import NewChatModal from './chat/NewChatModal';
 import ThemeToggle from '@/components/ui/ThemeToggle';
+import { toast } from 'sonner';
 
 export default function ChatList() {
   const [chatRooms, setChatRooms] = useState<SafeChatRoom[]>([]);
@@ -48,6 +49,9 @@ export default function ChatList() {
         body: JSON.stringify({ name, description }),
       });
       
+      if(response.status == 403){
+        toast.error("Chat Room Already Exists");
+      }
       const newChatRoom = await response.json();
       setChatRooms(prev => [...prev, newChatRoom]);
       setShowNewChatModal(false);

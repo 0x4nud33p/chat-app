@@ -80,7 +80,7 @@ export async function GET(
       recentRooms,
       isOwnProfile,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Error fetching user profile:', error);
     return NextResponse.json(
       { error: 'Failed to fetch user profile' },
@@ -150,7 +150,7 @@ export async function PATCH(
       user: updatedUser,
       message: 'Profile updated successfully',
     });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Error updating user profile:', error);
     return NextResponse.json(
       { error: 'Failed to update user profile' },

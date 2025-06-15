@@ -30,7 +30,7 @@ export async function GET() {
       }
     });
     return NextResponse.json(chatRooms);
-  } catch (error) {
+  } catch (error: unknown) {
     console.log("[CHAT_ROOMS_GET]", error);
     return new NextResponse("Internal Error", { status: 500 });
   }
@@ -75,7 +75,7 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json(chatRoom);
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("[CHAT_ROOMS_POST]", error);
     return new NextResponse("Internal Error", { status: 500 });
   }

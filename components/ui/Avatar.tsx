@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import { motion } from 'framer-motion';
 
 type AvatarProps = {
@@ -9,16 +8,7 @@ type AvatarProps = {
   isOnline?: boolean;
 };
 
-export default function Avatar({ src, name, isOnline = false }: AvatarProps) {
-  const initials = name
-    ? name
-        .split(' ')
-        .map(n => n[0])
-        .join('')
-        .toUpperCase()
-        .substring(0, 2)
-    : '?';
-
+export default function Avatar({ isOnline = false }: AvatarProps) {
   return (
     <div className="relative">
       <motion.div

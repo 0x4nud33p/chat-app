@@ -44,7 +44,7 @@ export async function GET(
     }
     
     return NextResponse.json(chatRoom);
-  } catch (error) {
+  } catch (error: unknown) {
     console.log("[CHAT_ROOM_GET]", error);
     return new NextResponse("Internal Error", { status: 500 });
   }
@@ -94,7 +94,7 @@ export async function PATCH(
     });
     
     return NextResponse.json(updatedChatRoom);
-  } catch (error) {
+  } catch (error: unknown) {
     console.log("[CHAT_ROOM_PATCH]", error);
     return new NextResponse("Internal Error", { status: 500 });
   }
@@ -142,7 +142,7 @@ export async function DELETE(
     });
     
     return new NextResponse(null, { status: 204 });
-  } catch (error) {
+  } catch (error: unknown) {
     console.log("[CHAT_ROOM_DELETE]", error);
     return new NextResponse("Internal Error", { status: 500 });
   }

@@ -1,13 +1,13 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import prisma from "@/prisma/index";
 import getUserSession from "@/utils/getUserData";
 
 export async function POST(
-  request: Request,
-  { params }: { params: { chatRoomId: string } }
+  request: NextRequest,
+  context: { params: { chatRoomId: string } }
 ) {
   try {
-    const { chatRoomId } = await params;
+    const { chatRoomId } = context.params;
     const session = await getUserSession();
     
     if (!session?.user?.id) {
@@ -60,7 +60,7 @@ export async function POST(
     });
     
     return NextResponse.json(message);
-  } catch (error) {
+  } catch (error: unknown) {
     console.log("[MESSAGES_POST]", error);
     return new NextResponse("Internal Error", { status: 500 });
   }

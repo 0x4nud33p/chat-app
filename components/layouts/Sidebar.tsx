@@ -20,7 +20,7 @@ type SidebarProps = {
 export default function Sidebar({ onSelectChatRoom }: SidebarProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const { user, signOut, isLoading: isAuthLoading } = useAuth();
+  const { user, signOut } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
   const { chatRooms, isLoading, error } = useChatRooms();

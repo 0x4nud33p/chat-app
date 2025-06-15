@@ -1,12 +1,11 @@
 'use client';
 
-import ChatLayout from '@/components/layouts/ChatLayout';
 import { motion } from 'framer-motion';
 import { MessageSquare } from 'lucide-react';
 import { useAuth } from "@/hooks/useAuth";
 
 export default function ChatPage() {
-  const { user, isLoading } = useAuth();
+  const { user } = useAuth();
 
   return (
     <div className="flex-1 flex flex-col items-center justify-center">
@@ -20,7 +19,7 @@ export default function ChatPage() {
         </div>
         <h1 className="text-2xl font-bold mb-2">Welcome to Chat App</h1>
         <p className="text-gray-600 dark:text-gray-400 mb-6">
-          {user?.name ? `Hello ${user.name}!` : 'Hello!'} Select a chat room from the sidebar or create a new one to start chatting.
+          {user?.name ? `Hello ${user.name}!` : 'Hello!'} Select a chat.
         </p>
       </motion.div>
     </div>

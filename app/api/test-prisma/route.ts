@@ -7,7 +7,7 @@ export async function GET() {
     const users = await prisma.user.findMany();
     console.log(users);
     return NextResponse.json({ connected: true, users: users });
-  } catch (error) {
+  } catch (error: unknown) {
     return NextResponse.json({ connected: false, error });
   }
 }

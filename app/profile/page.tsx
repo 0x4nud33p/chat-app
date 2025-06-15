@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   Mail,
@@ -18,7 +18,6 @@ import { formatDate } from "@/utils/formatDate";
 import { formatTime } from "@/utils/formatTime";
 
 export default function ProfilePage() {
-  const params = useParams();
   const router = useRouter();
   const { user: session } = useAuth();
   const userId = session?.id || null;

@@ -26,28 +26,30 @@ export default function ChatRoomPage() {
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Combine initial messages from API with real-time messages from socket
   useEffect(() => {
-    console.log("current chat room",chatRoom);
-    console.log("current chat room messages", chatRoom?.messages);
-    if (chatRoom?.messages) {
-      const combinedMessages = [...chatRoom.messages];
-      
-      // Add any socket messages that aren't already in the list
-      socketMessages.forEach(socketMsg => {
-        if (!combinedMessages.some(msg => msg.id === socketMsg.id)) {
-          combinedMessages.push(socketMsg);
-        }
-      });
-      
-      // Sort by timestamp
-      combinedMessages.sort((a, b) => 
+    if (!chatRoom?.messages) return;
+
+    const combined = [...chatRoom.messages];
+
+    socketMessages.forEach((socketMsg) => {
+      if (!combined.some((msg) => msg.id === socketMsg.id)) {
+        combined.push(socketMsg);
+      }
+    });
+
+    combined.sort(
+      (a, b) =>
         new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-      );
-      
-      setMessages(combinedMessages);
-    }
+    );
+
+    setMessages((prev) => {
+      const same =
+        prev.length === combined.length &&
+        prev.every((msg, idx) => msg.id === combined[idx].id);
+      return same ? prev : combined;
+    });
   }, [chatRoom?.messages, socketMessages]);
+  
 
   // Listen for online status updates
   useEffect(() => {

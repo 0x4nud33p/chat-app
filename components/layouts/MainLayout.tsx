@@ -7,7 +7,6 @@ import Link from 'next/link';
 import { Menu, X, Home, MessageSquare, User, LogOut } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Avatar from '@/components/ui/Avatar';
-import ThemeToggle from '@/components/ui/ThemeToggle';
 import Loading from '@/components/ui/Loading';
 
 type MainLayoutProps = {

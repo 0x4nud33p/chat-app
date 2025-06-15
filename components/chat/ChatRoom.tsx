@@ -3,8 +3,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams } from 'next/navigation';
 import { format } from 'date-fns';
-import { AnimatePresence, motion } from 'framer-motion';
-import { MessageSquare, Send, ChevronLeft } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { MessageSquare, ChevronLeft } from 'lucide-react';
 import Avatar from '@/components/ui/Avatar';
 import Loading from '@/components/ui/Loading';
 import ChatInput from '@/components/chat/ChatInput';

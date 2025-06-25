@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { usePathname } from 'next/navigation';
-import Sidebar from '@/components/layouts/Sidebar';
-import { Menu } from 'lucide-react';
+import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
+import Sidebar from "@/components/layouts/Sidebar";
+import { Menu } from "lucide-react";
 
 type ChatLayoutProps = {
   children: React.ReactNode;
@@ -13,9 +13,9 @@ export default function ChatLayout({ children }: ChatLayoutProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const pathname = usePathname();
-  
+
   // Check if we're on a specific chat room page
-  const isOnChatRoom = pathname.includes('/chat/') && pathname !== '/chat';
+  const isOnChatRoom = pathname.includes("/chat/") && pathname !== "/chat";
 
   // Handle window resize for responsive design
   useEffect(() => {
@@ -28,33 +28,33 @@ export default function ChatLayout({ children }: ChatLayoutProps) {
         setIsSidebarOpen(true);
       }
     };
-    
+
     // Initial check
     checkScreenSize();
-    
+
     // Add listener
-    window.addEventListener('resize', checkScreenSize);
-    
+    window.addEventListener("resize", checkScreenSize);
+
     // Cleanup
-    return () => window.removeEventListener('resize', checkScreenSize);
+    return () => window.removeEventListener("resize", checkScreenSize);
   }, [isOnChatRoom]);
 
   return (
     <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
-      <div 
+      <div
         className={`
-          ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} 
-          ${isMobile ? 'absolute z-10 h-full shadow-lg' : 'relative'}
+          ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} 
+          ${isMobile ? "absolute z-10 h-full shadow-lg" : "relative"}
           transition-transform duration-300 ease-in-out w-80 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700
         `}
       >
         <Sidebar onSelectChatRoom={() => isMobile && setIsSidebarOpen(false)} />
       </div>
-      
+
       <div className="flex-1 flex flex-col min-w-0">
         {isMobile && (
           <div className="bg-white dark:bg-gray-800 p-4 border-b border-gray-200 dark:border-gray-700 flex items-center">
-            <button 
+            <button
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
               className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700"
             >
@@ -62,14 +62,12 @@ export default function ChatLayout({ children }: ChatLayoutProps) {
             </button>
           </div>
         )}
-        
-        <div className="flex-1 overflow-hidden">
-          {children}
-        </div>
+
+        <div className="flex-1 overflow-hidden">{children}</div>
       </div>
-      
+
       {isMobile && isSidebarOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black bg-opacity-50 z-0"
           onClick={() => setIsSidebarOpen(false)}
         />

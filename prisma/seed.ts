@@ -1,7 +1,5 @@
-// import { PrismaClient } from '@/app/generated/client/deno/edge.ts'
-import { PrismaClient } from "@/app/generated/prisma";
-
-const prisma = new PrismaClient()
+import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();
 
 async function main() {
   console.log("Running seed script...");
@@ -9,7 +7,6 @@ async function main() {
     data: {
       name: 'Alice',
       email: 'alice@example.com',
-      password: 'hashedpassword1',
       image: 'https://i.pravatar.cc/150?u=alice',
       onlineStatus: true,
     },
@@ -19,7 +16,6 @@ async function main() {
     data: {
       name: 'Bob',
       email: 'bob@example.com',
-      password: 'hashedpassword2',
       image: 'https://i.pravatar.cc/150?u=bob',
       onlineStatus: false,
     },

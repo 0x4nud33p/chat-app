@@ -122,17 +122,6 @@ export default function ChatRoomPage() {
           >
             <Users size={20} />
           </Button>
-          {user?.id === chatRoom.ownerId && (
-            <Button 
-              variant="ghost" 
-              size="icon"
-              as={Link}
-              href={`/chat/${chatRoomId}/settings`}
-              aria-label="Chat room settings"
-            >
-              <Settings size={20} />
-            </Button>
-          )}
         </div>
       </header>
       

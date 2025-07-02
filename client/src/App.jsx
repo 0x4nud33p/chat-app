@@ -1,13 +1,11 @@
-import { useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import Auth from './pages/Auth';
-import Profile from './pages/Profile';
-import Chat from './pages/Chat';
-import PrivateRoute from './components/PrivateRoute';
-import AuthRoute from './components/AuthRoute';
-import { useAppStore } from './store';
-import apiClient from './lib/api-client';
-import { USER_INFO } from './utils/constants';
+import { useEffect, useState } from 'react'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import Auth from './pages/auth'
+import Profile from './pages/profile'
+import Chat from './pages/chat'
+import { useAppStore } from './store'
+import apiClient  from './lib/api-client'
+import { USER_INFO } from './utils/constants'
 
 function App() {
   const { userInfo, setUserInfo } = useAppStore();

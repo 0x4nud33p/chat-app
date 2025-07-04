@@ -7,6 +7,21 @@ import { useAppStore } from './store'
 import apiClient  from './lib/api-client'
 import { USER_INFO } from './utils/constants'
 
+
+const PrivateRoute = ({ children }) => {
+  const {userInfo} = useAppStore();
+  const isAuthenticated = !!userInfo;
+
+  return isAuthenticated ? children : <Navigate to="/auth" />;
+}
+
+const AuthRoute = ({ children }) => {
+  const {userInfo} = useAppStore();
+  const isAuthenticated = !!userInfo;
+
+  return isAuthenticated ?  <Navigate to="/chat" /> : children;
+}
+
 function App() {
   const { userInfo, setUserInfo } = useAppStore();
   const [loading, setLoading] = useState(true);
@@ -31,7 +46,7 @@ function App() {
   }, [setUserInfo]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className='w-full h-min-screen bg-blue-600'><span className='loader'></span></div>;
   }
 
   return (

@@ -30,24 +30,6 @@ A modern, feature-rich real-time chat application built with React, Node.js, and
 - **State Management** - Redux Toolkit for efficient state handling
 - **Responsive Design** - Mobile-first responsive interface
 
-## 🏗️ Architecture
-
-```
-├── client/                 # React frontend application
-│   ├── src/
-│   │   ├── components/     # Reusable UI components
-│   │   ├── pages/          # Application pages/routes
-│   │   ├── store/          # Redux store configuration
-│   │   ├── context/        # React context providers
-│   │   └── lib/            # Utility libraries
-└── server/                 # Node.js backend application
-    ├── controllers/        # Route controllers
-    ├── models/             # Database models
-    ├── routes/             # API route definitions
-    ├── middlewares/        # Custom middleware
-    └── uploads/            # File upload storage
-```
-
 ## 🛠️ Tech Stack
 
 ### Frontend
@@ -139,30 +121,6 @@ VITE_API_URL=http://localhost:8747/api
    cd client
    npm run dev
    ```
-
-3. **Access the application**
-   - Frontend: `http://localhost:5173`
-   - Backend API: `http://localhost:8747`
-
-## 🤝 Contributing
-
-We welcome contributions! Please follow these steps:
-
-1. **Fork the repository**
-2. **Create a feature branch**
-   ```bash
-   git checkout -b feature/amazing-feature
-   ```
-3. **Commit your changes**
-   ```bash
-   git commit -m 'Add some amazing feature'
-   ```
-4. **Push to the branch**
-   ```bash
-   git push origin feature/amazing-feature
-   ```
-5. **Open a Pull Request**
-
 ---
 
 <div align="center">
